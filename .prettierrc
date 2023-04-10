@@ -1,0 +1,10 @@
+{
+    "semi": false,
+    "trailingComma": "none",
+    "singleQuote": true,
+    "printWidth": 140,
+    "tabWidth": 4,
+    "indent_size": 2,
+    "endOfLine": "crlf"
+}
+

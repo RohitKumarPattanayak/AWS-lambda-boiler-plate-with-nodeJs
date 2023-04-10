@@ -1,0 +1,725 @@
+2023-03-17 13:45:47:4547 info: Docs available at http://localhost:3000/docs
+2023-03-17 13:45:47:4547 info: Connected successfully on port 3000
+2023-03-17 13:45:47:4547 error: Query Error: {"database":"oig_supervisor","error_number":1049,"message":"Unknown database 'oig_supervisor'"}
+2023-03-17 13:47:36:4736 info: Docs available at http://localhost:3000/docs
+2023-03-17 13:47:36:4736 info: Connected successfully on port 3000
+2023-03-17 13:47:39:4739 info: connected to DB, created required tables
+2023-03-17 13:47:49:4749 http: GET /docs 301 175 - 10.670 ms
+
+2023-03-17 13:47:49:4749 http: GET /docs/ 200 3106 - 4.994 ms
+
+2023-03-17 13:47:49:4749 http: GET /docs/swagger-ui.css 200 145206 - 3.120 ms
+
+2023-03-17 13:47:49:4749 http: GET /docs/swagger-ui-bundle.js 200 1046583 - 1.660 ms
+
+2023-03-17 13:47:49:4749 http: GET /docs/swagger-ui-init.js 200 346267 - 9.306 ms
+
+2023-03-17 13:47:49:4749 http: GET /docs/swagger-ui-standalone-preset.js 200 322863 - 21.937 ms
+
+2023-03-17 13:47:51:4751 http: GET /docs/favicon-32x32.png 200 628 - 1.623 ms
+
+2023-03-17 13:48:10:4810 http: Process 36685 received SIGINT: Exiting with code 0
+2023-03-17 13:48:36:4836 info: Docs available at http://localhost:3000/docs
+2023-03-17 13:48:36:4836 info: Connected successfully on port 3000
+2023-03-17 13:48:36:4836 info: connected to DB, created required tables
+2023-03-17 13:52:09:529 http: Process 37185 received SIGINT: Exiting with code 0
+2023-03-17 14:00:16:016 info: Docs available at http://localhost:3000/docs
+2023-03-17 14:00:16:016 info: Connected successfully on port 3000
+2023-03-17 14:00:16:016 info: connected to DB, created required tables
+2023-03-17 14:04:14:414 http: GET /jobs/Filter 200 404 - 78.189 ms
+
+2023-03-17 14:09:24:924 http: Process 38686 received SIGINT: Exiting with code 0
+2023-03-17 14:11:01:111 info: Docs available at http://localhost:3000/docs
+2023-03-17 14:11:01:111 info: Connected successfully on port 3000
+2023-03-17 14:11:01:111 info: connected to DB, created required tables
+2023-03-17 14:13:08:138 http: POST /user/upload 200 278 - 766.986 ms
+
+2023-03-17 14:17:05:175 http: Process 40352 received SIGINT: Exiting with code 0
+2023-03-17 14:25:53:2553 info: Docs available at http://localhost:3000/docs
+2023-03-17 14:25:53:2553 info: Connected successfully on port 3000
+2023-03-17 14:25:53:2553 info: connected to DB, created required tables
+2023-03-17 16:11:54:1154 http: Process 43398 received SIGINT: Exiting with code 0
+2023-03-17 17:03:02:32 info: Docs available at http://localhost:3000/docs
+2023-03-17 17:03:02:32 info: Connected successfully on port 3000
+2023-03-17 17:03:02:32 info: connected to DB, created required tables
+2023-03-18 07:58:21:5821 error: Query Error: {"database":"oig_supervisor","error_number":1055,"message":"Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'oig_supervisor.Attendence.id' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by","sql_query":"SELECT `Attendence`.* FROM (SELECT `Attendence`.`id`, min(`in_date_time`) AS `check_in_time`, (\n                                            SELECT\n                                                out_date_time\n                                            FROM\n                                                tbl_attendence as t1\n                                            INNER JOIN (\n                                                SELECT\n                                                    MAX(id) as id\n                                                FROM\n                                                    tbl_attendence\n                                                WHERE\n                                                    job_code = 'J01'\n                                                GROUP BY\n                                                    employee_code) as t2 ON\n                                                t1.id = t2.id\n                                            WHERE\n                                                employee_code = `Attendence`.`employee_code`) AS `check_out_time`, (\n                                            SELECT\n                                                in_date_time\n                                            FROM\n                                                tbl_attendence as t1\n                                            INNER JOIN (\n                                                SELECT\n                                                    MAX(id) as id\n                                                FROM\n                                                    tbl_attendence\n                                                WHERE\n                                                    job_code = 'J01'\n                                                GROUP BY\n                                                    employee_code) as t2 ON\n                                                t1.id = t2.id\n                                            WHERE\n                                                employee_code = `Attendence`.`employee_code`) AS `recent_check_in_time`, (\n                                            SELECT\n                                                (IFNULL((SELECT SUM(TIMESTAMPDIFF(SECOND, `in_date_time`, `out_date_time`))/ 3600 FROM tbl_attendence WHERE job_code = 'J01' AND tbl_attendence.employee_code = te.sap_employee_code AND MONTH(in_date_time) = 3) , 0)) + (IFNULL((SELECT SUM(TIME_TO_SEC(`hours`))/ 3600 FROM tbl_attendence_additional_hours WHERE job_code = 'J01' AND tbl_attendence_additional_hours.employee_code = te.sap_employee_code AND MONTH(date) = 3), 0)) as total_hours_worked\n                                            FROM\n                                                tbl_employee te\n                                            LEFT JOIN tbl_attendence tb ON\n                                                tb.employee_code = te.sap_employee_code\n                                            LEFT JOIN tbl_attendence_additional_hours ta ON\n                                                te.`sap_employee_code` = ta.`employee_code`\n                                            LEFT JOIN tbl_job tj ON\n                                                tj.`sap_job_code` = tb.`job_code`\n                                            WHERE\n                                                tb.job_code = 'J01'\n                                                AND tb.employee_code = `Attendence`.`employee_code`\n                                            GROUP BY\n                                                tb.employee_code) AS `total_monthly_hours_worked`, `Attendence`.`employee_code` FROM `tbl_attendence` AS `Attendence` INNER JOIN `tbl_job` AS `Job` ON `Attendence`.`job_code` = `Job`.`sap_job_code` AND `Job`.`status_code` IN ('ST01', 'ST02', 'ST03', 'ST06') WHERE (`Attendence`.`employee_code` IN ('21000002', '21000001', '21000004') AND (1 = case when coalesce(trim(NULL), '') = '' then 1 else (DATE(Attendence.in_date_time) >= DATE(NULL)) end AND `Attendence`.`job_code` = 'J01')) GROUP BY `employee_code`) AS `Attendence`;"}
+2023-03-18 07:58:21:5821 warn: Error encountered: {"httpCode":404,"description":"Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'oig_supervisor.Attendence.id' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by","path":"http://localhost/jobs/J01/staff"}
+2023-03-18 07:58:21:5821 http: GET /jobs/J01/staff 500 322 - 111.494 ms
+
+2023-03-20 08:35:28:3528 info: Docs available at http://localhost:3000/docs
+2023-03-20 08:35:28:3528 info: Connected successfully on port 3000
+2023-03-20 08:35:28:3528 info: connected to DB, created required tables
+2023-03-20 08:43:39:4339 info: Docs available at http://localhost:3000/docs
+2023-03-20 08:43:39:4339 info: Connected successfully on port 3000
+2023-03-20 08:43:39:4339 info: connected to DB, created required tables
+2023-03-20 08:44:12:4412 info: Docs available at http://localhost:3000/docs
+2023-03-20 08:44:12:4412 info: Connected successfully on port 3000
+2023-03-20 08:44:12:4412 info: connected to DB, created required tables
+2023-03-20 08:44:35:4435 http: Process 18833 received SIGINT: Exiting with code 0
+2023-03-20 08:45:03:453 info: Docs available at http://localhost:3000/docs
+2023-03-20 08:45:03:453 info: Connected successfully on port 3000
+2023-03-20 08:45:03:453 info: connected to DB, created required tables
+2023-03-20 08:46:29:4629 http: Process 19501 received SIGINT: Exiting with code 0
+2023-03-20 08:48:17:4817 info: Docs available at http://localhost:3000/docs
+2023-03-20 08:48:17:4817 info: Connected successfully on port 3000
+2023-03-20 08:48:17:4817 info: connected to DB, created required tables
+2023-03-20 08:48:53:4853 info: Docs available at http://localhost:3000/docs
+2023-03-20 08:48:53:4853 info: Connected successfully on port 3000
+2023-03-20 08:48:53:4853 info: connected to DB, created required tables
+2023-03-20 08:48:57:4857 http: Process 20417 received SIGINT: Exiting with code 0
+2023-03-20 08:49:22:4922 info: Docs available at http://localhost:3000/docs
+2023-03-20 08:49:22:4922 info: Connected successfully on port 3000
+2023-03-20 08:49:22:4922 info: connected to DB, created required tables
+2023-03-20 08:49:34:4934 http: GET /docs/ 304 - - 16.151 ms
+
+2023-03-20 08:49:35:4935 http: GET /docs/swagger-ui-init.js 304 - - 4.005 ms
+
+2023-03-20 08:49:35:4935 http: GET /docs/swagger-ui.css 200 145206 - 24.012 ms
+
+2023-03-20 08:49:35:4935 http: GET /docs/swagger-ui-standalone-preset.js 200 322863 - 18.290 ms
+
+2023-03-20 08:49:35:4935 http: GET /docs/swagger-ui-bundle.js 200 1046583 - 22.350 ms
+
+2023-03-20 08:56:35:5635 info: Docs available at http://localhost:3000/docs
+2023-03-20 08:56:35:5635 info: Connected successfully on port 3000
+2023-03-20 08:56:35:5635 info: connected to DB, created required tables
+2023-03-20 10:15:25:1525 http: Process 21962 received SIGINT: Exiting with code 0
+2023-03-20 10:15:44:1544 info: Docs available at http://localhost:3000/docs
+2023-03-20 10:15:44:1544 info: Connected successfully on port 3000
+2023-03-20 10:15:44:1544 info: connected to DB, created required tables
+2023-03-20 10:15:51:1551 http: Process 25022 received SIGINT: Exiting with code 0
+2023-03-20 10:16:20:1620 info: Docs available at http://localhost:3000/docs
+2023-03-20 10:16:20:1620 info: Connected successfully on port 3000
+2023-03-20 10:16:20:1620 info: connected to DB, created required tables
+2023-03-20 14:59:41:5941 http: Process 25309 received SIGINT: Exiting with code 0
+2023-03-24 13:56:18:5618 info: Docs available at http://localhost:3000/docs
+2023-03-24 13:56:18:5618 info: Connected successfully on port 3000
+2023-03-24 13:56:18:5618 info: connected to DB, created required tables
+2023-03-24 13:56:24:5624 http: Process 37323 received SIGINT: Exiting with code 0
+2023-03-24 13:56:50:5650 info: Docs available at http://localhost:3000/docs
+2023-03-24 13:56:50:5650 info: Connected successfully on port 3000
+2023-03-24 13:56:50:5650 info: connected to DB, created required tables
+2023-03-24 13:59:40:5940 http: Process 37452 received SIGINT: Exiting with code 0
+2023-04-03 15:49:56:4956 info: Docs available at http://localhost:3000/docs
+2023-04-03 15:49:56:4956 info: Connected successfully on port 3000
+2023-04-03 15:49:56:4956 info: connected to DB, created required tables
+2023-04-03 15:51:45:5145 info: Docs available at http://localhost:3000/docs
+2023-04-03 15:51:45:5145 info: Connected successfully on port 3000
+2023-04-03 15:51:46:5146 info: connected to DB, created required tables
+2023-04-03 15:53:00:530 info: Docs available at http://localhost:3000/docs
+2023-04-03 15:53:00:530 info: Connected successfully on port 3000
+2023-04-03 15:53:00:530 info: connected to DB, created required tables
+2023-04-03 15:54:37:5437 http: Process 125381 received SIGINT: Exiting with code 0
+2023-04-03 15:56:01:561 info: Docs available at http://localhost:3000/docs
+2023-04-03 15:56:01:561 info: Connected successfully on port 3000
+2023-04-03 15:56:01:561 info: connected to DB, created required tables
+2023-04-03 15:59:40:5940 http: Process 125987 received SIGINT: Exiting with code 0
+2023-04-03 16:13:23:1323 info: Docs available at http://localhost:3000/docs
+2023-04-03 16:13:23:1323 info: Connected successfully on port 3000
+2023-04-03 16:13:23:1323 info: connected to DB, created required tables
+2023-04-03 16:13:59:1359 warn: Error encountered: {"httpCode":404,"description":"Cannot read properties of undefined (reading 'mimetype')","path":"http://localhost/user/upload"}
+2023-04-03 16:13:59:1359 error: Untrusted Error: {"info":"Application encountered an untrusted error.","message":"Cannot read properties of undefined (reading 'mimetype')","path":"http://localhost/user/upload"}
+2023-04-03 16:13:59:1359 http: Attempting a graceful shutdown with code 1
+2023-04-03 16:13:59:1359 http: Terminating HTTP connections
+2023-04-03 16:13:59:1359 http: POST /user/upload 500 100 - 26.989 ms
+
+2023-04-03 16:14:00:140 http: Exiting gracefully with code 1
+2023-04-03 16:17:25:1725 info: Docs available at http://localhost:3000/docs
+2023-04-03 16:17:25:1725 info: Connected successfully on port 3000
+2023-04-03 16:17:25:1725 info: connected to DB, created required tables
+2023-04-03 16:19:25:1925 info: Docs available at http://localhost:3000/docs
+2023-04-03 16:19:25:1925 info: Connected successfully on port 3000
+2023-04-03 16:19:25:1925 info: connected to DB, created required tables
+2023-04-03 16:19:49:1949 warn: Error encountered: {"httpCode":404,"description":"Cannot read properties of undefined (reading 'mimetype')","path":"http://localhost/user/upload"}
+2023-04-03 16:19:49:1949 error: Untrusted Error: {"info":"Application encountered an untrusted error.","message":"Cannot read properties of undefined (reading 'mimetype')","path":"http://localhost/user/upload"}
+2023-04-03 16:19:49:1949 http: Attempting a graceful shutdown with code 1
+2023-04-03 16:19:49:1949 http: Terminating HTTP connections
+2023-04-03 16:19:49:1949 http: POST /user/upload 500 100 - 74.648 ms
+
+2023-04-03 16:19:50:1950 http: Exiting gracefully with code 1
+2023-04-03 16:22:53:2253 info: Docs available at http://localhost:3000/docs
+2023-04-03 16:22:53:2253 info: Connected successfully on port 3000
+2023-04-03 16:22:53:2253 info: connected to DB, created required tables
+2023-04-03 16:23:02:232 warn: Error encountered: {"httpCode":404,"description":"Cannot read properties of undefined (reading 'mimetype')","path":"http://localhost/user/upload"}
+2023-04-03 16:23:02:232 error: Untrusted Error: {"info":"Application encountered an untrusted error.","message":"Cannot read properties of undefined (reading 'mimetype')","path":"http://localhost/user/upload"}
+2023-04-03 16:23:02:232 http: Attempting a graceful shutdown with code 1
+2023-04-03 16:23:02:232 http: Terminating HTTP connections
+2023-04-03 16:23:02:232 http: POST /user/upload 500 100 - 23.038 ms
+
+2023-04-03 16:23:03:233 http: Exiting gracefully with code 1
+2023-04-03 16:23:51:2351 info: Docs available at http://localhost:3000/docs
+2023-04-03 16:23:51:2351 info: Connected successfully on port 3000
+2023-04-03 16:23:51:2351 info: connected to DB, created required tables
+2023-04-03 16:23:58:2358 warn: Error encountered: {"httpCode":404,"description":"Cannot read properties of undefined (reading 'mimetype')","path":"http://localhost/user/upload"}
+2023-04-03 16:23:58:2358 error: Untrusted Error: {"info":"Application encountered an untrusted error.","message":"Cannot read properties of undefined (reading 'mimetype')","path":"http://localhost/user/upload"}
+2023-04-03 16:23:58:2358 http: Attempting a graceful shutdown with code 1
+2023-04-03 16:23:58:2358 http: Terminating HTTP connections
+2023-04-03 16:23:58:2358 http: POST /user/upload 500 100 - 37.884 ms
+
+2023-04-03 16:23:59:2359 http: Exiting gracefully with code 1
+2023-04-03 16:41:19:4119 info: Docs available at http://localhost:3000/docs
+2023-04-03 16:41:19:4119 info: Connected successfully on port 3000
+2023-04-03 16:41:20:4120 info: connected to DB, created required tables
+2023-04-03 16:41:40:4140 http: POST /user/upload 200 278 - 389.700 ms
+
+2023-04-03 16:43:13:4313 info: Docs available at http://localhost:3000/docs
+2023-04-03 16:43:13:4313 info: Connected successfully on port 3000
+2023-04-03 16:43:13:4313 info: connected to DB, created required tables
+2023-04-03 16:43:19:4319 http: POST /user/upload 200 278 - 370.465 ms
+
+2023-04-03 16:43:24:4324 http: Process 130788 received SIGINT: Exiting with code 0
+2023-04-03 16:45:42:4542 info: Docs available at http://localhost:3000/docs
+2023-04-03 16:45:42:4542 info: Connected successfully on port 3000
+2023-04-03 16:45:43:4543 info: connected to DB, created required tables
+2023-04-03 16:45:47:4547 http: POST /user/upload 200 225 - 388.211 ms
+
+2023-04-03 16:48:29:4829 http: Process 131413 received SIGINT: Exiting with code 0
+2023-04-03 16:50:17:5017 info: Docs available at http://localhost:3000/docs
+2023-04-03 16:50:17:5017 info: Connected successfully on port 3000
+2023-04-03 16:50:17:5017 info: connected to DB, created required tables
+2023-04-03 16:50:33:5033 http: POST /user/upload 200 278 - 396.292 ms
+
+2023-04-03 16:54:06:546 http: POST /user/upload 200 278 - 702.964 ms
+
+2023-04-03 16:54:27:5427 http: Process 132392 received SIGINT: Exiting with code 0
+2023-04-03 16:54:42:5442 info: Docs available at http://localhost:3000/docs
+2023-04-03 16:54:42:5442 info: Connected successfully on port 3000
+2023-04-03 16:54:43:5443 info: connected to DB, created required tables
+2023-04-03 16:56:14:5614 http: POST /user/upload 200 225 - 429.240 ms
+
+2023-04-03 16:57:00:570 info: Docs available at http://localhost:3000/docs
+2023-04-03 16:57:00:570 info: Connected successfully on port 3000
+2023-04-03 16:57:00:570 info: connected to DB, created required tables
+2023-04-03 16:57:21:5721 info: Docs available at http://localhost:3000/docs
+2023-04-03 16:57:21:5721 info: Connected successfully on port 3000
+2023-04-03 16:57:21:5721 info: connected to DB, created required tables
+2023-04-03 16:57:26:5726 http: POST /user/upload 200 278 - 415.643 ms
+
+2023-04-04 10:20:01:201 info: Docs available at http://localhost:3000/docs
+2023-04-04 10:20:01:201 info: Connected successfully on port 3000
+2023-04-04 10:20:01:201 info: connected to DB, created required tables
+2023-04-04 10:22:29:2229 info: Docs available at http://localhost:3000/docs
+2023-04-04 10:22:29:2229 info: Connected successfully on port 3000
+2023-04-04 10:22:29:2229 info: connected to DB, created required tables
+2023-04-04 10:24:56:2456 http: POST /user/upload 200 278 - 466.880 ms
+
+2023-04-04 10:25:32:2532 info: Docs available at http://localhost:3000/docs
+2023-04-04 10:25:32:2532 info: Connected successfully on port 3000
+2023-04-04 10:25:32:2532 info: connected to DB, created required tables
+2023-04-04 10:36:39:3639 info: Docs available at http://localhost:3000/docs
+2023-04-04 10:36:39:3639 info: Connected successfully on port 3000
+2023-04-04 10:36:39:3639 info: connected to DB, created required tables
+2023-04-04 10:51:43:5143 error: Query Error: {"database":"oig_supervisor","error_number":1055,"message":"Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'oig_supervisor.Attendence.id' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by","sql_query":"SELECT `Attendence`.* FROM (SELECT `Attendence`.`id`, min(`in_date_time`) AS `check_in_time`, (\n                                            SELECT\n                                                out_date_time\n                                            FROM\n                                                tbl_attendence as t1\n                                            INNER JOIN (\n                                                SELECT\n                                                    MAX(id) as id\n                                                FROM\n                                                    tbl_attendence\n                                                WHERE\n                                                    job_code = 'J01'\n                                                GROUP BY\n                                                    employee_code) as t2 ON\n                                                t1.id = t2.id\n                                            WHERE\n                                                employee_code = `Attendence`.`employee_code`) AS `check_out_time`, (\n                                            SELECT\n                                                in_date_time\n                                            FROM\n                                                tbl_attendence as t1\n                                            INNER JOIN (\n                                                SELECT\n                                                    MAX(id) as id\n                                                FROM\n                                                    tbl_attendence\n                                                WHERE\n                                                    job_code = 'J01'\n                                                GROUP BY\n                                                    employee_code) as t2 ON\n                                                t1.id = t2.id\n                                            WHERE\n                                                employee_code = `Attendence`.`employee_code`) AS `recent_check_in_time`, (\n                                            SELECT\n                                                (IFNULL((SELECT SUM(TIMESTAMPDIFF(SECOND, `in_date_time`, `out_date_time`))/ 3600 FROM tbl_attendence WHERE job_code = 'J01' AND tbl_attendence.employee_code = te.sap_employee_code AND MONTH(in_date_time) = 4) , 0)) + (IFNULL((SELECT SUM(TIME_TO_SEC(`hours`))/ 3600 FROM tbl_attendence_additional_hours WHERE job_code = 'J01' AND tbl_attendence_additional_hours.employee_code = te.sap_employee_code AND MONTH(date) = 4), 0)) as total_hours_worked\n                                            FROM\n                                                tbl_employee te\n                                            LEFT JOIN tbl_attendence tb ON\n                                                tb.employee_code = te.sap_employee_code\n                                            LEFT JOIN tbl_attendence_additional_hours ta ON\n                                                te.`sap_employee_code` = ta.`employee_code`\n                                            LEFT JOIN tbl_job tj ON\n                                                tj.`sap_job_code` = tb.`job_code`\n                                            WHERE\n                                                tb.job_code = 'J01'\n                                                AND tb.employee_code = `Attendence`.`employee_code`\n                                            GROUP BY\n                                                tb.employee_code) AS `total_monthly_hours_worked`, `Attendence`.`employee_code` FROM `tbl_attendence` AS `Attendence` INNER JOIN `tbl_job` AS `Job` ON `Attendence`.`job_code` = `Job`.`sap_job_code` AND `Job`.`status_code` IN ('ST01', 'ST02', 'ST03', 'ST06') WHERE (`Attendence`.`employee_code` IN ('21000002', '21000001', '21000004') AND (1 = case when coalesce(trim(NULL), '') = '' then 1 else (DATE(Attendence.in_date_time) >= DATE(NULL)) end AND `Attendence`.`job_code` = 'J01')) GROUP BY `employee_code`) AS `Attendence`;"}
+2023-04-04 10:51:43:5143 warn: Error encountered: {"httpCode":404,"description":"Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'oig_supervisor.Attendence.id' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by","path":"http://localhost/jobs/J01/staff"}
+2023-04-04 10:51:43:5143 http: GET /jobs/J01/staff 500 322 - 128.410 ms
+
+2023-04-04 10:52:15:5215 http: GET /jobs/J01/staff 200 1368 - 42.142 ms
+
+2023-04-04 10:52:39:5239 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/jobs"}
+2023-04-04 10:52:39:5239 http: GET /admin/jobs 404 93 - 7.831 ms
+
+2023-04-04 10:54:08:548 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/jobs"}
+2023-04-04 10:54:08:548 http: GET /admin/jobs 404 93 - 3.086 ms
+
+2023-04-04 10:54:10:5410 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/jobs"}
+2023-04-04 10:54:10:5410 http: GET /admin/jobs 404 93 - 4.180 ms
+
+2023-04-04 10:54:10:5410 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/jobs"}
+2023-04-04 10:54:10:5410 http: GET /admin/jobs 404 93 - 6.344 ms
+
+2023-04-04 10:54:11:5411 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/jobs"}
+2023-04-04 10:54:11:5411 http: GET /admin/jobs 404 93 - 7.539 ms
+
+2023-04-04 10:55:59:5559 http: Process 136139 received SIGINT: Exiting with code 0
+2023-04-04 11:01:01:11 info: Docs available at http://localhost:3000/docs
+2023-04-04 11:01:01:11 info: Connected successfully on port 3000
+2023-04-04 11:01:01:11 info: connected to DB, created required tables
+2023-04-04 11:01:04:14 http: GET /docs/ 304 - - 11.887 ms
+
+2023-04-04 11:01:05:15 http: GET /docs/swagger-ui.css 200 145206 - 5.770 ms
+
+2023-04-04 11:01:05:15 http: GET /docs/swagger-ui-bundle.js 200 1046583 - 1.776 ms
+
+2023-04-04 11:01:05:15 http: GET /docs/swagger-ui-init.js 200 346267 - 3.592 ms
+
+2023-04-04 11:01:05:15 http: GET /docs/swagger-ui-standalone-preset.js 200 322863 - 22.791 ms
+
+2023-04-04 11:01:08:18 http: GET /docs/favicon-32x32.png 200 628 - 2.652 ms
+
+2023-04-04 11:01:29:129 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/jobs?search=J01&limit=10&offset=0"}
+2023-04-04 11:01:29:129 http: GET /admin/jobs?search=J01&limit=10&offset=0 404 122 - 20.740 ms
+
+2023-04-04 11:02:35:235 info: Docs available at http://localhost:3000/docs
+2023-04-04 11:02:35:235 info: Connected successfully on port 3000
+2023-04-04 11:02:35:235 info: connected to DB, created required tables
+2023-04-04 11:03:03:33 info: Docs available at http://localhost:3000/docs
+2023-04-04 11:03:03:33 info: Connected successfully on port 3000
+2023-04-04 11:03:03:33 info: connected to DB, created required tables
+2023-04-04 11:03:38:338 info: Docs available at http://localhost:3000/docs
+2023-04-04 11:03:38:338 info: Connected successfully on port 3000
+2023-04-04 11:03:38:338 info: connected to DB, created required tables
+2023-04-04 11:03:56:356 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/jobs"}
+2023-04-04 11:04:29:429 info: Docs available at http://localhost:3000/docs
+2023-04-04 11:04:29:429 info: Connected successfully on port 3000
+2023-04-04 11:04:29:429 info: connected to DB, created required tables
+2023-04-04 11:06:57:657 info: Docs available at http://localhost:3000/docs
+2023-04-04 11:06:57:657 info: Connected successfully on port 3000
+2023-04-04 11:06:57:657 info: connected to DB, created required tables
+2023-04-04 11:07:38:738 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/jobs"}
+2023-04-04 11:07:38:738 http: POST /admin/jobs 404 93 - 34.449 ms
+
+2023-04-04 11:08:20:820 info: Docs available at http://localhost:3000/docs
+2023-04-04 11:08:20:820 info: Connected successfully on port 3000
+2023-04-04 11:08:21:821 info: connected to DB, created required tables
+2023-04-04 11:08:45:845 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/jobs"}
+2023-04-04 11:09:11:911 info: Docs available at http://localhost:3000/docs
+2023-04-04 11:09:11:911 info: Connected successfully on port 3000
+2023-04-04 11:09:11:911 info: connected to DB, created required tables
+2023-04-04 11:09:26:926 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/jobs"}
+2023-04-04 11:09:48:948 info: Docs available at http://localhost:3000/docs
+2023-04-04 11:09:48:948 info: Connected successfully on port 3000
+2023-04-04 11:09:48:948 info: connected to DB, created required tables
+2023-04-04 13:15:41:1541 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/jobs"}
+2023-04-04 13:17:16:1716 info: Docs available at http://localhost:3000/docs
+2023-04-04 13:17:16:1716 info: Connected successfully on port 3000
+2023-04-04 13:17:16:1716 info: connected to DB, created required tables
+2023-04-04 13:17:49:1749 info: Docs available at http://localhost:3000/docs
+2023-04-04 13:17:49:1749 info: Connected successfully on port 3000
+2023-04-04 13:17:49:1749 info: connected to DB, created required tables
+2023-04-04 13:18:19:1819 info: Docs available at http://localhost:3000/docs
+2023-04-04 13:18:19:1819 info: Connected successfully on port 3000
+2023-04-04 13:18:19:1819 info: connected to DB, created required tables
+2023-04-04 13:18:44:1844 info: Docs available at http://localhost:3000/docs
+2023-04-04 13:18:44:1844 info: Connected successfully on port 3000
+2023-04-04 13:18:44:1844 info: connected to DB, created required tables
+2023-04-04 13:19:20:1920 info: Docs available at http://localhost:3000/docs
+2023-04-04 13:19:20:1920 info: Connected successfully on port 3000
+2023-04-04 13:19:20:1920 info: connected to DB, created required tables
+2023-04-04 13:19:54:1954 info: Docs available at http://localhost:3000/docs
+2023-04-04 13:19:54:1954 info: Connected successfully on port 3000
+2023-04-04 13:19:54:1954 info: connected to DB, created required tables
+2023-04-04 13:20:35:2035 info: Docs available at http://localhost:3000/docs
+2023-04-04 13:20:35:2035 info: Connected successfully on port 3000
+2023-04-04 13:20:35:2035 info: connected to DB, created required tables
+2023-04-04 13:21:05:215 info: Docs available at http://localhost:3000/docs
+2023-04-04 13:21:05:215 info: Connected successfully on port 3000
+2023-04-04 13:21:05:215 info: connected to DB, created required tables
+2023-04-04 13:32:26:3226 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 13:32:46:3246 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 13:32:47:3247 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 13:37:02:372 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 13:37:03:373 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 13:37:04:374 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 13:38:49:3849 info: Docs available at http://localhost:3000/docs
+2023-04-04 13:38:49:3849 info: Connected successfully on port 3000
+2023-04-04 13:38:49:3849 info: connected to DB, created required tables
+2023-04-04 13:38:54:3854 warn: Error encountered: {"httpCode":404,"description":"Invalid credentials","path":"http://localhost/admin/login"}
+2023-04-04 13:39:02:392 warn: Error encountered: {"httpCode":404,"description":"Invalid credentials","path":"http://localhost/admin/login"}
+2023-04-04 13:39:03:393 warn: Error encountered: {"httpCode":404,"description":"Invalid credentials","path":"http://localhost/admin/login"}
+2023-04-04 13:39:56:3956 warn: Error encountered: {"httpCode":404,"description":"Invalid credentials","path":"http://localhost/admin/login"}
+2023-04-04 13:40:37:4037 info: Docs available at http://localhost:3000/docs
+2023-04-04 13:40:37:4037 info: Connected successfully on port 3000
+2023-04-04 13:40:37:4037 info: connected to DB, created required tables
+2023-04-04 13:40:54:4054 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 13:43:53:4353 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 13:43:54:4354 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 13:43:55:4355 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 13:44:02:442 http: Process 142669 received SIGINT: Exiting with code 0
+2023-04-04 13:44:25:4425 info: Docs available at http://localhost:3000/docs
+2023-04-04 13:44:25:4425 info: Connected successfully on port 3000
+2023-04-04 13:44:25:4425 info: connected to DB, created required tables
+2023-04-04 13:45:28:4528 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 13:53:28:5328 info: Docs available at http://localhost:3000/docs
+2023-04-04 13:53:28:5328 info: Connected successfully on port 3000
+2023-04-04 13:53:28:5328 info: connected to DB, created required tables
+2023-04-04 13:55:06:556 warn: Error encountered: {"httpCode":404,"description":"Invalid credentials","path":"http://localhost/admin/login"}
+2023-04-04 13:55:16:5516 warn: Error encountered: {"httpCode":404,"description":"Invalid credentials","path":"http://localhost/admin/login"}
+2023-04-04 13:55:17:5517 warn: Error encountered: {"httpCode":404,"description":"Invalid credentials","path":"http://localhost/admin/login"}
+2023-04-04 13:55:27:5527 warn: Error encountered: {"httpCode":404,"description":"Invalid credentials","path":"http://localhost/admin/login"}
+2023-04-04 13:56:01:561 info: Docs available at http://localhost:3000/docs
+2023-04-04 13:56:01:561 info: Connected successfully on port 3000
+2023-04-04 13:56:01:561 info: connected to DB, created required tables
+2023-04-04 13:56:17:5617 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 13:57:30:5730 info: Docs available at http://localhost:3000/docs
+2023-04-04 13:57:30:5730 info: Connected successfully on port 3000
+2023-04-04 13:57:31:5731 info: connected to DB, created required tables
+2023-04-04 13:57:35:5735 warn: Error encountered: {"httpCode":404,"description":"Invalid credentials","path":"http://localhost/admin/login"}
+2023-04-04 13:58:20:5820 info: Docs available at http://localhost:3000/docs
+2023-04-04 13:58:20:5820 info: Connected successfully on port 3000
+2023-04-04 13:58:21:5821 info: connected to DB, created required tables
+2023-04-04 13:58:28:5828 warn: Error encountered: {"httpCode":404,"description":"Invalid credentials","path":"http://localhost/admin/login"}
+2023-04-04 13:59:18:5918 warn: Error encountered: {"httpCode":404,"description":"Invalid credentials","path":"http://localhost/admin/login"}
+2023-04-04 13:59:50:5950 warn: Error encountered: {"httpCode":404,"description":"empcode is required","path":"http://localhost/login"}
+2023-04-04 14:00:37:037 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:00:37:037 info: Connected successfully on port 3000
+2023-04-04 14:00:37:037 info: connected to DB, created required tables
+2023-04-04 14:09:31:931 warn: Error encountered: {"httpCode":404,"description":"Invalid credentials","path":"http://localhost/admin/login"}
+2023-04-04 14:09:41:941 warn: Error encountered: {"httpCode":404,"description":"Invalid credentials","path":"http://localhost/admin/login"}
+2023-04-04 14:12:42:1242 warn: Error encountered: {"httpCode":404,"description":"Invalid credentials","path":"http://localhost/admin/login"}
+2023-04-04 14:13:04:134 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:13:04:134 info: Connected successfully on port 3000
+2023-04-04 14:13:04:134 info: connected to DB, created required tables
+2023-04-04 14:13:12:1312 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:13:55:1355 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:13:55:1355 info: Connected successfully on port 3000
+2023-04-04 14:13:55:1355 info: connected to DB, created required tables
+2023-04-04 14:14:05:145 http: POST /admin/login 200 368 - 24.992 ms
+
+2023-04-04 14:16:50:1650 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:16:50:1650 info: Connected successfully on port 3000
+2023-04-04 14:16:51:1651 info: connected to DB, created required tables
+2023-04-04 14:17:33:1733 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/login"}
+2023-04-04 14:17:33:1733 http: POST /admin/login 404 94 - 34.030 ms
+
+2023-04-04 14:17:43:1743 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/jobs"}
+2023-04-04 14:17:43:1743 http: POST /admin/jobs 404 93 - 7.310 ms
+
+2023-04-04 14:18:06:186 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:18:06:186 info: Connected successfully on port 3000
+2023-04-04 14:18:06:186 info: connected to DB, created required tables
+2023-04-04 14:18:18:1818 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/jobs"}
+2023-04-04 14:18:22:1822 http: Process 145526 received SIGINT: Exiting with code 0
+2023-04-04 14:18:43:1843 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:18:43:1843 info: Connected successfully on port 3000
+2023-04-04 14:18:43:1843 info: connected to DB, created required tables
+2023-04-04 14:19:01:191 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/jobs"}
+2023-04-04 14:19:33:1933 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:19:33:1933 info: Connected successfully on port 3000
+2023-04-04 14:19:33:1933 info: connected to DB, created required tables
+2023-04-04 14:19:49:1949 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/jobs"}
+2023-04-04 14:19:49:1949 http: GET /admin/jobs 404 93 - 55.551 ms
+
+2023-04-04 14:19:50:1950 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/jobs"}
+2023-04-04 14:19:50:1950 http: GET /admin/jobs 404 93 - 4.543 ms
+
+2023-04-04 14:20:14:2014 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:20:14:2014 info: Connected successfully on port 3000
+2023-04-04 14:20:14:2014 info: connected to DB, created required tables
+2023-04-04 14:20:44:2044 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:23:30:2330 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:24:04:244 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:24:17:2417 warn: Error encountered: {"httpCode":404,"description":"empcode is required","path":"http://localhost/login"}
+2023-04-04 14:27:25:2725 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:27:36:2736 warn: Error encountered: {"httpCode":404,"description":"empcode is required","path":"http://localhost/login"}
+2023-04-04 14:28:26:2826 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:28:26:2826 info: Connected successfully on port 3000
+2023-04-04 14:28:26:2826 info: connected to DB, created required tables
+2023-04-04 14:28:27:2827 warn: Error encountered: {"httpCode":404,"description":"empcode is required","path":"http://localhost/login"}
+2023-04-04 14:29:22:2922 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:29:22:2922 info: Connected successfully on port 3000
+2023-04-04 14:29:22:2922 warn: Error encountered: {"httpCode":404,"description":"empcode is required","path":"http://localhost/login"}
+2023-04-04 14:29:22:2922 info: connected to DB, created required tables
+2023-04-04 14:29:36:2936 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:30:01:301 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:30:55:3055 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:30:55:3055 info: Connected successfully on port 3000
+2023-04-04 14:30:55:3055 info: connected to DB, created required tables
+2023-04-04 14:30:55:3055 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:31:06:316 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:31:07:317 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:31:55:3155 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:31:55:3155 info: Connected successfully on port 3000
+2023-04-04 14:31:55:3155 info: connected to DB, created required tables
+2023-04-04 14:32:17:3217 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:32:17:3217 info: Connected successfully on port 3000
+2023-04-04 14:32:17:3217 info: connected to DB, created required tables
+2023-04-04 14:32:44:3244 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:32:44:3244 info: Connected successfully on port 3000
+2023-04-04 14:32:44:3244 info: connected to DB, created required tables
+2023-04-04 14:33:29:3329 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:33:29:3329 info: Connected successfully on port 3000
+2023-04-04 14:33:29:3329 info: connected to DB, created required tables
+2023-04-04 14:34:05:345 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:34:05:345 info: Connected successfully on port 3000
+2023-04-04 14:34:06:346 info: connected to DB, created required tables
+2023-04-04 14:34:08:348 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:34:46:3446 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:34:46:3446 info: Connected successfully on port 3000
+2023-04-04 14:34:46:3446 info: connected to DB, created required tables
+2023-04-04 14:35:06:356 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/admin/login"}
+2023-04-04 14:36:10:3610 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:36:10:3610 info: Connected successfully on port 3000
+2023-04-04 14:36:10:3610 info: connected to DB, created required tables
+2023-04-04 14:37:14:3714 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:37:14:3714 info: Connected successfully on port 3000
+2023-04-04 14:37:15:3715 info: connected to DB, created required tables
+2023-04-04 14:38:24:3824 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:38:24:3824 info: Connected successfully on port 3000
+2023-04-04 14:38:24:3824 info: connected to DB, created required tables
+2023-04-04 14:39:35:3935 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:39:35:3935 info: Connected successfully on port 3000
+2023-04-04 14:39:35:3935 info: connected to DB, created required tables
+2023-04-04 14:39:35:3935 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:39:35:3935 http: POST /admin/login 404 123 - 27.390 ms
+
+2023-04-04 14:40:19:4019 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:40:19:4019 info: Connected successfully on port 3000
+2023-04-04 14:40:19:4019 info: connected to DB, created required tables
+2023-04-04 14:40:28:4028 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:40:28:4028 http: POST /admin/login 404 123 - 29.284 ms
+
+2023-04-04 14:40:29:4029 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:40:29:4029 http: POST /admin/login 404 123 - 5.673 ms
+
+2023-04-04 14:41:03:413 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:41:03:413 info: Connected successfully on port 3000
+2023-04-04 14:41:03:413 info: connected to DB, created required tables
+2023-04-04 14:41:03:413 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:41:03:413 http: POST /admin/login 404 123 - 31.167 ms
+
+2023-04-04 14:41:04:414 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:41:04:414 http: POST /admin/login 404 123 - 6.443 ms
+
+2023-04-04 14:41:04:414 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:41:04:414 http: POST /admin/login 404 123 - 7.117 ms
+
+2023-04-04 14:41:57:4157 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:41:57:4157 info: Connected successfully on port 3000
+2023-04-04 14:41:57:4157 info: connected to DB, created required tables
+2023-04-04 14:42:19:4219 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:42:19:4219 info: Connected successfully on port 3000
+2023-04-04 14:42:20:4220 info: connected to DB, created required tables
+2023-04-04 14:43:40:4340 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:43:40:4340 info: Connected successfully on port 3000
+2023-04-04 14:43:40:4340 info: connected to DB, created required tables
+2023-04-04 14:43:58:4358 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/login"}
+2023-04-04 14:43:58:4358 http: POST /admin/login 404 94 - 18.548 ms
+
+2023-04-04 14:44:33:4433 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:44:33:4433 info: Connected successfully on port 3000
+2023-04-04 14:44:33:4433 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/login"}
+2023-04-04 14:44:33:4433 http: POST /admin/login 404 94 - 19.285 ms
+
+2023-04-04 14:44:33:4433 info: connected to DB, created required tables
+2023-04-04 14:44:34:4434 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/login"}
+2023-04-04 14:44:34:4434 http: POST /admin/login 404 94 - 3.681 ms
+
+2023-04-04 14:45:01:451 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:45:01:451 info: Connected successfully on port 3000
+2023-04-04 14:45:01:451 info: connected to DB, created required tables
+2023-04-04 14:45:12:4512 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:45:12:4512 http: POST /admin/login 404 123 - 27.866 ms
+
+2023-04-04 14:46:40:4640 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:46:40:4640 info: Connected successfully on port 3000
+2023-04-04 14:46:40:4640 info: connected to DB, created required tables
+2023-04-04 14:47:13:4713 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:47:13:4713 info: Connected successfully on port 3000
+2023-04-04 14:47:13:4713 info: connected to DB, created required tables
+2023-04-04 14:47:21:4721 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/login"}
+2023-04-04 14:47:21:4721 http: POST /admin/login 404 94 - 22.184 ms
+
+2023-04-04 14:47:48:4748 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:47:48:4748 info: Connected successfully on port 3000
+2023-04-04 14:47:48:4748 info: connected to DB, created required tables
+2023-04-04 14:50:51:5051 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:50:51:5051 info: Connected successfully on port 3000
+2023-04-04 14:50:51:5051 info: connected to DB, created required tables
+2023-04-04 14:51:41:5141 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:51:41:5141 info: Connected successfully on port 3000
+2023-04-04 14:51:41:5141 info: connected to DB, created required tables
+2023-04-04 14:51:41:5141 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:51:41:5141 http: POST /admin/login 404 123 - 28.334 ms
+
+2023-04-04 14:52:32:5232 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:52:32:5232 info: Connected successfully on port 3000
+2023-04-04 14:52:32:5232 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:52:32:5232 http: POST /admin/login 404 123 - 30.568 ms
+
+2023-04-04 14:52:32:5232 info: connected to DB, created required tables
+2023-04-04 14:52:33:5233 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:52:33:5233 http: POST /admin/login 404 123 - 7.926 ms
+
+2023-04-04 14:52:33:5233 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:52:33:5233 http: POST /admin/login 404 123 - 4.631 ms
+
+2023-04-04 14:52:33:5233 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:52:33:5233 http: POST /admin/login 404 123 - 7.012 ms
+
+2023-04-04 14:52:58:5258 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:52:58:5258 info: Connected successfully on port 3000
+2023-04-04 14:52:59:5259 info: connected to DB, created required tables
+2023-04-04 14:53:33:5333 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:53:33:5333 info: Connected successfully on port 3000
+2023-04-04 14:53:34:5334 info: connected to DB, created required tables
+2023-04-04 14:53:35:5335 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/login"}
+2023-04-04 14:53:35:5335 http: POST /admin/login 404 94 - 58.422 ms
+
+2023-04-04 14:53:42:5342 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/admin/login"}
+2023-04-04 14:53:42:5342 http: POST /admin/admin/login 404 129 - 13.763 ms
+
+2023-04-04 14:54:32:5432 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:54:32:5432 info: Connected successfully on port 3000
+2023-04-04 14:54:32:5432 info: connected to DB, created required tables
+2023-04-04 14:55:03:553 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:55:03:553 info: Connected successfully on port 3000
+2023-04-04 14:55:03:553 info: connected to DB, created required tables
+2023-04-04 14:55:09:559 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/admin/login"}
+2023-04-04 14:55:09:559 http: POST /admin/admin/login 404 129 - 29.134 ms
+
+2023-04-04 14:55:58:5558 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:55:58:5558 info: Connected successfully on port 3000
+2023-04-04 14:55:58:5558 info: connected to DB, created required tables
+2023-04-04 14:56:29:5629 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/admin/admin/login"}
+2023-04-04 14:56:29:5629 http: POST /admin/admin/login 404 100 - 18.861 ms
+
+2023-04-04 14:56:34:5634 http: POST /admin/login 200 368 - 22.115 ms
+
+2023-04-04 14:58:19:5819 http: POST /admin/login 200 368 - 7.231 ms
+
+2023-04-04 14:59:17:5917 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:59:17:5917 info: Connected successfully on port 3000
+2023-04-04 14:59:18:5918 info: connected to DB, created required tables
+2023-04-04 14:59:21:5921 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-04 14:59:53:5953 info: Docs available at http://localhost:3000/docs
+2023-04-04 14:59:53:5953 info: Connected successfully on port 3000
+2023-04-04 14:59:53:5953 info: connected to DB, created required tables
+2023-04-04 15:00:15:015 info: Docs available at http://localhost:3000/docs
+2023-04-04 15:00:15:015 info: Connected successfully on port 3000
+2023-04-04 15:00:15:015 info: connected to DB, created required tables
+2023-04-04 16:22:55:2255 http: Process 149835 received SIGINT: Exiting with code 0
+2023-04-04 16:25:09:259 info: Docs available at http://localhost:3000/docs
+2023-04-04 16:25:09:259 info: Connected successfully on port 3000
+2023-04-04 16:25:09:259 info: connected to DB, created required tables
+2023-04-04 16:34:30:3430 http: Process 151483 received SIGINT: Exiting with code 0
+2023-04-04 16:35:09:359 info: Docs available at http://localhost:3000/docs
+2023-04-04 16:35:09:359 info: Connected successfully on port 3000
+2023-04-04 16:35:09:359 info: connected to DB, created required tables
+2023-04-04 16:59:41:5941 http: Process 151868 received SIGINT: Exiting with code 0
+2023-04-05 10:25:50:2550 info: Docs available at http://localhost:3000/docs
+2023-04-05 10:25:50:2550 info: Connected successfully on port 3000
+2023-04-05 10:25:50:2550 info: connected to DB, created required tables
+2023-04-05 10:28:50:2850 info: Docs available at http://localhost:3000/docs
+2023-04-05 10:28:50:2850 info: Connected successfully on port 3000
+2023-04-05 10:28:50:2850 info: connected to DB, created required tables
+2023-04-05 10:31:05:315 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/users/upload"}
+2023-04-05 10:31:05:315 http: GET /users/upload 404 95 - 31.881 ms
+
+2023-04-05 10:31:42:3142 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/user/upload"}
+2023-04-05 10:31:42:3142 http: GET /user/upload 404 94 - 5.907 ms
+
+2023-04-05 10:31:52:3152 http: POST /user/upload 200 278 - 582.773 ms
+
+2023-04-05 10:48:54:4854 info: Docs available at http://localhost:3000/docs
+2023-04-05 10:48:54:4854 info: Connected successfully on port 3000
+2023-04-05 10:48:54:4854 info: connected to DB, created required tables
+2023-04-05 10:49:11:4911 info: Docs available at http://localhost:3000/docs
+2023-04-05 10:49:11:4911 info: Connected successfully on port 3000
+2023-04-05 10:49:11:4911 info: connected to DB, created required tables
+2023-04-05 10:49:55:4955 http: GET /admin/jobs 304 - - 24.566 ms
+
+2023-04-05 10:54:50:5450 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/user/upload"}
+2023-04-05 10:54:50:5450 http: GET /user/upload 404 94 - 25.672 ms
+
+2023-04-05 11:07:12:712 http: Process 159455 received SIGINT: Exiting with code 0
+2023-04-05 11:10:55:1055 info: Docs available at http://localhost:3000/docs
+2023-04-05 11:10:55:1055 info: Connected successfully on port 3000
+2023-04-05 11:10:55:1055 info: connected to DB, created required tables
+2023-04-05 11:11:05:115 http: GET /jobs/J01/staff 304 - - 48.660 ms
+
+2023-04-05 11:11:41:1141 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/user/upload"}
+2023-04-05 11:11:41:1141 http: GET /user/upload 404 94 - 31.256 ms
+
+2023-04-05 11:11:46:1146 http: POST /user/upload 200 278 - 464.951 ms
+
+2023-04-05 11:12:22:1222 http: Process 160940 received SIGINT: Exiting with code 0
+2023-04-05 11:25:15:2515 info: Docs available at http://localhost:3000/docs
+2023-04-05 11:25:15:2515 info: Connected successfully on port 3000
+2023-04-05 11:25:15:2515 info: connected to DB, created required tables
+2023-04-05 11:41:28:4128 http: Process 161919 received SIGINT: Exiting with code 0
+2023-04-05 13:49:14:4914 info: Docs available at http://localhost:3000/docs
+2023-04-05 13:49:14:4914 info: Connected successfully on port 3000
+2023-04-05 13:49:14:4914 info: connected to DB, created required tables
+2023-04-05 13:49:34:4934 http: GET /admin/jobs 304 - - 28.060 ms
+
+2023-04-05 13:50:12:5012 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/user/upload"}
+2023-04-05 13:50:12:5012 http: GET /user/upload 404 94 - 37.071 ms
+
+2023-04-05 13:50:23:5023 http: POST /user/upload 200 278 - 492.725 ms
+
+2023-04-05 13:57:32:5732 http: Process 171748 received SIGINT: Exiting with code 0
+2023-04-05 13:57:56:5756 info: Docs available at http://localhost:3000/docs
+2023-04-05 13:57:56:5756 info: Connected successfully on port 3000
+2023-04-05 13:57:56:5756 info: connected to DB, created required tables
+2023-04-05 14:06:16:616 info: Docs available at http://localhost:3000/docs
+2023-04-05 14:06:16:616 info: Connected successfully on port 3000
+2023-04-05 14:06:17:617 info: connected to DB, created required tables
+2023-04-05 14:12:16:1216 info: Docs available at http://localhost:3000/docs
+2023-04-05 14:12:16:1216 info: Connected successfully on port 3000
+2023-04-05 14:12:16:1216 info: connected to DB, created required tables
+2023-04-05 14:12:41:1241 info: Docs available at http://localhost:3000/docs
+2023-04-05 14:12:41:1241 info: Connected successfully on port 3000
+2023-04-05 14:12:41:1241 info: connected to DB, created required tables
+2023-04-05 16:01:50:150 http: Process 173353 received SIGINT: Exiting with code 0
+2023-04-05 16:14:35:1435 info: Docs available at http://localhost:3000/docs
+2023-04-05 16:14:35:1435 info: Connected successfully on port 3000
+2023-04-05 16:14:35:1435 info: connected to DB, created required tables
+2023-04-05 16:14:46:1446 warn: Error encountered: {"httpCode":404,"description":"file not uploaded","path":"http://localhost/user/upload"}
+2023-04-05 16:14:46:1446 http: POST /user/upload 404 96 - 26.296 ms
+
+2023-04-05 16:14:57:1457 http: POST /user/upload 200 278 - 439.332 ms
+
+2023-04-05 16:15:26:1526 info: Docs available at http://localhost:3000/docs
+2023-04-05 16:15:26:1526 info: Connected successfully on port 3000
+2023-04-05 16:15:26:1526 info: connected to DB, created required tables
+2023-04-05 16:21:03:213 http: Process 177854 received SIGINT: Exiting with code 0
+2023-04-05 16:40:03:403 info: Docs available at http://localhost:3000/docs
+2023-04-05 16:40:03:403 info: Connected successfully on port 3000
+2023-04-05 16:40:03:403 info: connected to DB, created required tables
+2023-04-05 16:41:08:418 info: Docs available at http://localhost:3000/docs
+2023-04-05 16:41:08:418 info: Connected successfully on port 3000
+2023-04-05 16:41:08:418 info: connected to DB, created required tables
+2023-04-05 16:42:10:4210 http: GET / 200 64 - 2.234 ms
+
+2023-04-05 16:42:17:4217 http: GET / 200 64 - 0.837 ms
+
+2023-04-05 16:42:18:4218 http: GET / 200 63 - 0.452 ms
+
+2023-04-05 16:42:19:4219 http: GET / 200 64 - 0.517 ms
+
+2023-04-05 16:51:06:516 http: GET / 200 65 - 1.139 ms
+
+2023-04-05 16:51:06:516 warn: Error encountered: {"httpCode":404,"description":"URL not found..","path":"http://localhost/favicon.ico"}
+2023-04-05 16:51:06:516 http: GET /favicon.ico 404 94 - 35.610 ms
+
+2023-04-05 16:51:47:5147 info: Docs available at http://localhost:3000/docs
+2023-04-05 16:51:47:5147 info: Connected successfully on port 3000
+2023-04-05 16:51:47:5147 info: connected to DB, created required tables
+2023-04-05 20:34:03:343 http: Process 179461 received SIGINT: Exiting with code 0
+2023-04-05 20:45:08:458 info: Docs available at http://localhost:3000/docs
+2023-04-05 20:45:08:458 info: Connected successfully on port 3000
+2023-04-05 20:45:08:458 info: connected to DB, created required tables
+2023-04-05 20:45:19:4519 warn: Error encountered: {"httpCode":404,"description":"username is required and should be a string.","path":"http://localhost/admin/login"}
+2023-04-05 20:45:19:4519 http: POST /admin/login 404 123 - 23.831 ms
+
+2023-04-05 20:45:34:4534 http: POST /admin/login 200 368 - 35.529 ms
+
+2023-04-05 20:46:09:469 http: Process 186393 received SIGINT: Exiting with code 0
+2023-04-06 09:11:48:1148 info: Docs available at http://localhost:3000/docs
+2023-04-06 09:11:48:1148 info: Connected successfully on port 3000
+2023-04-06 09:11:48:1148 info: connected to DB, created required tables
+2023-04-06 09:11:49:1149 http: Process 11279 received SIGINT: Exiting with code 0
+2023-04-06 09:20:31:2031 info: Docs available at http://localhost:3000/docs
+2023-04-06 09:20:31:2031 info: Connected successfully on port 3000
+2023-04-06 09:21:19:2119 http: Process 12471 received SIGINT: Exiting with code 0
+2023-04-06 09:29:12:2912 info: Docs available at http://localhost:3000/docs
+2023-04-06 09:29:12:2912 info: Connected successfully on port 3000
+2023-04-06 09:29:14:2914 http: Process 14668 received SIGINT: Exiting with code 0
+2023-04-06 10:04:14:414 info: Docs available at http://localhost:3000/docs
+2023-04-06 10:04:14:414 info: Connected successfully on port 3000
+2023-04-06 10:04:51:451 http: Process 17317 received SIGINT: Exiting with code 0
+2023-04-06 10:08:53:853 info: Docs available at http://localhost:3000/docs
+2023-04-06 10:08:53:853 info: Connected successfully on port 3000
+2023-04-06 10:09:51:951 http: Process 17905 received SIGINT: Exiting with code 0
+2023-04-06 10:09:58:958 info: Docs available at http://localhost:3000/docs
+2023-04-06 10:09:58:958 info: Connected successfully on port 3000
+2023-04-06 10:10:06:106 http: Process 18042 received SIGINT: Exiting with code 0
+2023-04-06 10:11:09:119 info: Docs available at http://localhost:3000/docs
+2023-04-06 10:11:09:119 info: Connected successfully on port 3000
+2023-04-06 10:28:48:2848 http: Process 18291 received SIGINT: Exiting with code 0
+2023-04-06 10:29:41:2941 info: Docs available at http://localhost:3000/docs
+2023-04-06 10:29:41:2941 info: Connected successfully on port 3000
+2023-04-06 10:31:44:3144 http: Process 19901 received SIGINT: Exiting with code 0
+2023-04-06 10:32:38:3238 info: Docs available at http://localhost:3000/docs
+2023-04-06 10:32:38:3238 info: Connected successfully on port 3000
+2023-04-06 10:34:08:348 http: Process 20546 received SIGINT: Exiting with code 0

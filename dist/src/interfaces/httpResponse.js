@@ -1,0 +1,22 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HttpCode = void 0;
+var HttpCode;
+(function (HttpCode) {
+    HttpCode[HttpCode["OK"] = 200] = "OK";
+    HttpCode[HttpCode["NO_CONTENT"] = 204] = "NO_CONTENT";
+    HttpCode[HttpCode["BAD_REQUEST"] = 400] = "BAD_REQUEST";
+    HttpCode[HttpCode["UNAUTHORIZED"] = 401] = "UNAUTHORIZED";
+    HttpCode[HttpCode["FORBIDDEN"] = 403] = "FORBIDDEN";
+    HttpCode[HttpCode["NOT_FOUND"] = 404] = "NOT_FOUND";
+    HttpCode[HttpCode["METHOD_NOT_ALLOW"] = 405] = "METHOD_NOT_ALLOW";
+    HttpCode[HttpCode["CONFLICT"] = 409] = "CONFLICT";
+    HttpCode[HttpCode["INTERNAL_SERVER_ERROR"] = 500] = "INTERNAL_SERVER_ERROR";
+    HttpCode[HttpCode["DUPLICATE"] = 1001] = "DUPLICATE";
+    HttpCode[HttpCode["INPUT_ERROR"] = 1002] = "INPUT_ERROR";
+    HttpCode[HttpCode["NO_DATA"] = 1003] = "NO_DATA";
+    HttpCode[HttpCode["TRANSACTION_FAILED"] = 1004] = "TRANSACTION_FAILED";
+    HttpCode[HttpCode["BAD_TIME_INPUT"] = 1005] = "BAD_TIME_INPUT";
+    HttpCode[HttpCode["ALREADY_PRESENT"] = 1006] = "ALREADY_PRESENT";
+})(HttpCode || (HttpCode = {}));
+exports.HttpCode = HttpCode;
